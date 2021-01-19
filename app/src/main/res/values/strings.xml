@@ -10,4 +10,10 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="containedText">Test Pop-Up</string>
+    <string name="message">Yes! please.</string>
+    <string name="baking">My Baking (Scroll Up)</string>
+    <string name="cinnamon">Cinnamon Rolls</string>
+    <string name="no_description_needed">No description needed!</string>
+    <string name="cookies">Cookies</string>
+    <string name="todo">TODO</string>
 </resources>
