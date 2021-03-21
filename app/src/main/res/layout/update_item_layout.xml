@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NewItemActivity"
+    android:orientation="vertical"
+    android:background="#E61F2219">
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleTextColor="@android:color/white"
+        android:background="#E61F2219"
+        style="@style/Theme.AppCompat.Light.DarkActionBar"
+        app:popupTheme="@style/Widget.AppCompat.PopupMenu"
+        android:id="@+id/toolBar"
+        android:minHeight="?attr/actionBarSize">
+
+        <LinearLayout
+            android:id="@+id/toolBarMenuContainer"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="left">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/back_button"
+                android:layout_margin="5dp"
+                tools:ignore="UselessParent">
+
+                <Button
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:padding="5dp"
+                    android:textAllCaps="false"
+                    android:id="@+id/backBtn"
+                    android:textColor="@color/white"
+                    tools:ignore="HardcodedText"/>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_margin="10dp">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Task to do"
+            android:id="@+id/itemName"
+            android:textColor="@color/white"
+            android:textColorHint="#505050"
+            android:background="#1F2219"
+            android:padding="8dp"/>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#9de59d"
+        android:layout_margin="20dp">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:text="Update Task"
+            android:id="@+id/saveNewItemBtn"
+            android:textColor="@color/black"
+            android:textStyle="bold"/>
+
+    </FrameLayout>
+
+</LinearLayout>

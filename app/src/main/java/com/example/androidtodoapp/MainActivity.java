@@ -1,75 +1,65 @@
 package com.example.androidtodoapp;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.Intent;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
+import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.view.View;
-
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Toast;
-
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import com.example.androidtodoapp.roomdatabase.MyRoomDatabase;
+import com.example.androidtodoapp.roomdatabase.ToDoListTable;
 import java.util.ArrayList;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
 
-    private ArrayList<String> items;
-    private ArrayAdapter<String> itemsAdapter;
-    private ListView listView;
-    private FloatingActionButton button;
+    private Button addNewItem;
+    private RecyclerView recyclerView;
+    private List<ToDoListTable> toDoModelList = new ArrayList<>();
+    private MyRoomDatabase myRoomDatabase;
+    private SwipeRefreshLayout swipeRefreshLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = findViewById(R.id.toolBar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("To Do App");
 
-        listView = findViewById(R.id.listView);
-        button = findViewById(R.id.button);
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addItem(v);
-            }
+        swipeRefreshLayout = findViewById(R.id.swipe);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        addNewItem = findViewById(R.id.addNewItemActivityBtn);
+        addNewItem.setOnClickListener((v) -> {
+            startActivity(new Intent(MainActivity.this, NewItemActivity.class));
+            finish();
         });
 
-        items = new ArrayList<>();
-        itemsAdapter = new ArrayAdapter<>( this, android.R.layout.simple_list_item_1, items);
-        listView.setAdapter(itemsAdapter);
-        setUpListViewListener();
+        myRoomDatabase = MyRoomDatabase.getInstance(getApplicationContext());
+        recyclerView = findViewById(R.id.toDoRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setHasFixedSize(true);
+        collectItems();
+
     }
 
-    private void setUpListViewListener() {
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                Context context = getApplicationContext();
-                Toast.makeText(context, "Item Removed", Toast.LENGTH_LONG).show();
-
-                items.remove(position);
-                itemsAdapter.notifyDataSetChanged();
-                return true;
-            }
-        });
+    private void collectItems(){
+        swipeRefreshLayout.setRefreshing(true);
+        toDoModelList = myRoomDatabase.myDataAccessInterface().collectList();
+        RecyclerView.Adapter adapter = new ToDoListRecyclerAdapter(MainActivity.this, toDoModelList, myRoomDatabase);
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+        swipeRefreshLayout.setRefreshing(false);
     }
 
-    private void addItem(View v) {
-        EditText input = findViewById(R.id.newToDoItem);
-        String itemText = input.getText().toString();
+    @Override
+    public void onRefresh() {
 
-        if(!(itemText.equals(""))){
-            itemsAdapter.add(itemText);
-            input.setText("");
-        }
-        else{
-            Toast.makeText(getApplicationContext(),"Please enter text...", Toast.LENGTH_LONG).show();
-        }
+        collectItems();
+
     }
 }
+
